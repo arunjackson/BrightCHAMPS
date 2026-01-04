@@ -123,41 +123,40 @@
   </div>
 
   <script>
-    function calculate() {
-      const classes = Number(document.getElementById('classes').value);
-      const basePrice = 25;
-      const employeeDiscount = 0.25;
+  function calculate() {
+    const classes = Number(document.getElementById("classes").value);
+    const basePrice = 25;
+    const employeeDiscount = 0.25;
 
-      let websiteDiscount = 0;
-      let kitCost = 80;
+    let websiteDiscount = 0;
+    let kitCost = 80;
 
-      if (classes >= 150) {
-        websiteDiscount = 0.25;
-        kitCost = 504;
-      } else if (classes >= 90) {
-        websiteDiscount = 0.10;
-        kitCost = 160;
-      }
-
-      const totalDiscount = websiteDiscount + employeeDiscount;
-      const webRPC = basePrice * (1 - websiteDiscount);
-      const smRPC = basePrice * (1 - totalDiscount);
-      const packagePrice = smRPC * classes;
-      const totalPrice = packagePrice + kitCost;
-      const originalPrice = (basePrice * classes) + kitCost;
-
-      document.getElementById('webDiscount').innerText = (websiteDiscount * 100) + '%';
-      document.getElementById('webRPC').innerText = webRPC.toFixed(2);
-      document.getElementById('totalDiscount').innerText = (totalDiscount * 100) + '%';
-      document.getElementById('smRPC').innerText = smRPC.toFixed(2);
-      document.getElementById('packagePrice').innerText = packagePrice.toFixed(2);
-      document.getElementById('scholarshipPrice').innerText = totalPrice.toFixed(2);
-      document.getElementById('originalPrice').innerText = originalPrice.toFixed(2);
-      document.getElementById('finalPayable').innerText = totalPrice.toFixed(2);.innerText = totalPrice.toFixed(2);
-      document.getElementById('kitCost').innerText = kitCost;
+    if (classes >= 150) {
+      websiteDiscount = 0.25;
+      kitCost = 504;
+    } else if (classes >= 90) {
+      websiteDiscount = 0.10;
+      kitCost = 160;
     }
 
-    calculate();
-  </script>
-</body>
-</html>
+    const totalDiscount = websiteDiscount + employeeDiscount;
+
+    const webRPC = basePrice * (1 - websiteDiscount);
+    const smRPC = basePrice * (1 - totalDiscount);
+
+    const packagePrice = smRPC * classes;
+    const scholarshipPrice = packagePrice + kitCost;
+    const originalPrice = (basePrice * classes) + kitCost;
+
+    document.getElementById("webDiscount").innerText = (websiteDiscount * 100) + "%";
+    document.getElementById("webRPC").innerText = webRPC.toFixed(2);
+    document.getElementById("totalDiscount").innerText = (totalDiscount * 100) + "%";
+    document.getElementById("smRPC").innerText = smRPC.toFixed(2);
+
+    document.getElementById("scholarshipPrice").innerText = scholarshipPrice.toFixed(2);
+    document.getElementById("originalPrice").innerText = originalPrice.toFixed(2);
+    document.getElementById("finalPayable").innerText = scholarshipPrice.toFixed(2);
+  }
+
+  calculate();
+</script>
