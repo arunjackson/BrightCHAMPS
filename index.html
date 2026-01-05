@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ON Call Prices</title>
+
+  <!-- Prevent caching -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,7 +17,7 @@
       padding: 30px;
     }
     .container {
-      max-width: 900px;
+      max-width: 1000px;
       margin: auto;
       background: #ffffff;
       padding: 25px;
@@ -20,7 +26,14 @@
     }
     h1 {
       text-align: center;
+      margin-bottom: 10px;
+    }
+    .timer {
+      text-align: center;
+      color: #d9534f;
+      font-weight: bold;
       margin-bottom: 20px;
+      font-size: 18px;
     }
     table {
       width: 100%;
@@ -44,119 +57,185 @@
       font-weight: bold;
       color: #0b5ed7;
     }
-    .note {
-      margin-top: 15px;
-      font-size: 14px;
-      color: #555;
+    .preset-buttons button {
+      margin-right: 10px;
+      margin-bottom: 10px;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #0b5ed7;
+      color: #fff;
+      font-weight: bold;
+    }
+    .side-box {
+      background:#f9fafc;
+      padding:16px;
+      border-radius:10px;
+    }
+    .side-box h3 {
+      margin-top: 0;
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <h1>ON Call Prices</h1>
+    <div class="timer">
+      ⏰ Scholarship expires in <span id="countdown">02:00:00</span>
+    </div>
 
     <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;">
 
-    <table>
-      <tr>
-        <th>OTO</th>
-        <td>Robotics</td>
-      </tr>
-      <tr>
-        <th>Class Bundle (Enter Here)</th>
-        <td><input type="number" id="classes" value="45" oninput="calculate()"></td>
-      </tr>
-      <tr>
-        <th>Base Price (USD)</th>
-        <td>$<span id="basePrice">25</span></td>
-      </tr>
-      <tr>
-        <th>Website Discount</th>
-        <td><span id="webDiscount">0%</span></td>
-      </tr>
-      <tr>
-        <th>Website Discounted RPC</th>
-        <td>$<span id="webRPC">25.00</span></td>
-      </tr>
-      <tr>
-        <th>Employee Discount (SM)</th>
-        <td>25%</td>
-      </tr>
-      <tr>
-        <th>Total Discount</th>
-        <td><span id="totalDiscount">25%</span></td>
-      </tr>
-      <tr>
-        <th>SM Discounted RPC</th>
-        <td class="highlight">$<span id="smRPC">18.75</span></td>
-      </tr>
-      <tr>
-        <th>Scholarship Price (Including Kit)</th>
-        <td class="highlight">$<span id="scholarshipPrice">923.75</span></td>
-      </tr>
-      <tr>
-        <th>Original Price</th>
-        <td style="color:#888;"><del>$<span id="originalPrice">1205.00</span></del></td>
-      </tr>
-      <tr>
-        <th><strong>TOTAL PRICE – PAYABLE TODAY</strong></th>
-        <td class="highlight">$<span id="finalPayable">923.75</span></td>
-      </tr>
-    </table>
+      <!-- LEFT TABLE -->
+      <table>
+        <tr>
+          <th>OTO</th>
+          <td>Robotics</td>
+        </tr>
 
-    <div style="background:#f9fafc;padding:16px;border-radius:10px;">
-      <h3>Includes:</h3>
-      <ul style="line-height:1.8;">
-        <li>Delivery Cost</li>
-        <li>Kit Cost</li>
-        <li>Student Dashboard</li>
-        <li>Certificate</li>
-        <li>1:1 Live Classes</li>
-        <li>Free Courses</li>
-        <li>Flexible Scheduling</li>
-      </ul>
+        <tr>
+          <th>Preset Class Bundles</th>
+          <td class="preset-buttons">
+            <button onclick="setClasses(45)">45</button>
+            <button onclick="setClasses(90)">90</button>
+            <button onclick="setClasses(150)">150</button>
+          </td>
+        </tr>
+
+        <tr>
+          <th>Class Bundle (Enter Here)</th>
+          <td><input type="number" id="classes" value="45" oninput="calculate()"></td>
+        </tr>
+
+        <tr>
+          <th>Rate Per Class (USD)</th>
+          <td><input type="number" id="rate" value="25" oninput="calculate()"></td>
+        </tr>
+
+        <tr>
+          <th>Website Discount</th>
+          <td><span id="webDiscount">0%</span></td>
+        </tr>
+
+        <tr>
+          <th>Website Discounted RPC</th>
+          <td>$<span id="webRPC">25.00</span></td>
+        </tr>
+
+        <tr>
+          <th>Employee Discount (SM)</th>
+          <td>25%</td>
+        </tr>
+
+        <tr>
+          <th>Total Discount</th>
+          <td><span id="totalDiscount">25%</span></td>
+        </tr>
+
+        <tr>
+          <th>SM Discounted RPC</th>
+          <td class="highlight">$<span id="smRPC">18.75</span></td>
+        </tr>
+
+        <tr>
+          <th>Scholarship Price (Including Kit)</th>
+          <td class="highlight">$<span id="scholarshipPrice">923.75</span></td>
+        </tr>
+
+        <tr>
+          <th>Original Price</th>
+          <td style="color:#888;">
+            <del>$<span id="originalPrice">1205.00</span></del>
+          </td>
+        </tr>
+
+        <tr>
+          <th><strong>TOTAL PRICE – PAYABLE TODAY</strong></th>
+          <td class="highlight">$<span id="finalPayable">923.75</span></td>
+        </tr>
+      </table>
+
+      <!-- RIGHT PANEL -->
+      <div class="side-box">
+        <h3>Includes:</h3>
+        <ul>
+          <li>Delivery Cost</li>
+          <li>Kit Cost</li>
+          <li>Student Dashboard</li>
+          <li>Certificate</li>
+          <li>1:1 Live Classes</li>
+          <li>Free Courses</li>
+          <li>Flexible Scheduling</li>
+        </ul>
+
+        <hr>
+
+        <h3>After the payment!</h3>
+        <ul>
+          <li>Complete address</li>
+          <li>No. of classes/week (1 or 2)</li>
+          <li>Preferred class timings (with time zone)</li>
+        </ul>
+      </div>
+
     </div>
-
   </div>
 
-    <p class="note">👉 Enter only the number of classes. All values are calculated automatically.</p>
-  </div>
-
+  <!-- SCRIPT -->
   <script>
-  function calculate() {
-    const classes = Number(document.getElementById("classes").value);
-    const basePrice = 25;
-    const employeeDiscount = 0.25;
-
-    let websiteDiscount = 0;
-    let kitCost = 80;
-
-    if (classes >= 150) {
-      websiteDiscount = 0.25;
-      kitCost = 504;
-    } else if (classes >= 90) {
-      websiteDiscount = 0.10;
-      kitCost = 160;
+    function setClasses(value) {
+      document.getElementById("classes").value = value;
+      calculate();
     }
 
-    const totalDiscount = websiteDiscount + employeeDiscount;
+    function calculate() {
+      const classes = Number(document.getElementById("classes").value);
+      const rate = Number(document.getElementById("rate").value);
+      const employeeDiscount = 0.25;
 
-    const webRPC = basePrice * (1 - websiteDiscount);
-    const smRPC = basePrice * (1 - totalDiscount);
+      let websiteDiscount = 0;
+      let kitCost = 80;
 
-    const packagePrice = smRPC * classes;
-    const scholarshipPrice = packagePrice + kitCost;
-    const originalPrice = (basePrice * classes) + kitCost;
+      if (classes >= 150) {
+        websiteDiscount = 0.25;
+        kitCost = 504;
+      } else if (classes >= 90) {
+        websiteDiscount = 0.10;
+        kitCost = 160;
+      }
 
-    document.getElementById("webDiscount").innerText = (websiteDiscount * 100) + "%";
-    document.getElementById("webRPC").innerText = webRPC.toFixed(2);
-    document.getElementById("totalDiscount").innerText = (totalDiscount * 100) + "%";
-    document.getElementById("smRPC").innerText = smRPC.toFixed(2);
+      const totalDiscount = websiteDiscount + employeeDiscount;
 
-    document.getElementById("scholarshipPrice").innerText = scholarshipPrice.toFixed(2);
-    document.getElementById("originalPrice").innerText = originalPrice.toFixed(2);
-    document.getElementById("finalPayable").innerText = scholarshipPrice.toFixed(2);
-  }
+      const webRPC = rate * (1 - websiteDiscount);
+      const smRPC = rate * (1 - totalDiscount);
 
-  calculate();
-</script>
+      const packagePrice = smRPC * classes;
+      const scholarshipPrice = packagePrice + kitCost;
+      const originalPrice = (rate * classes) + kitCost;
+
+      document.getElementById("webDiscount").innerText = (websiteDiscount * 100) + "%";
+      document.getElementById("webRPC").innerText = webRPC.toFixed(2);
+      document.getElementById("totalDiscount").innerText = (totalDiscount * 100) + "%";
+      document.getElementById("smRPC").innerText = smRPC.toFixed(2);
+      document.getElementById("scholarshipPrice").innerText = scholarshipPrice.toFixed(2);
+      document.getElementById("originalPrice").innerText = originalPrice.toFixed(2);
+      document.getElementById("finalPayable").innerText = scholarshipPrice.toFixed(2);
+    }
+
+    // Countdown timer (2 hours)
+    let timeLeft = 2 * 60 * 60;
+    setInterval(() => {
+      if (timeLeft <= 0) return;
+      timeLeft--;
+      const h = String(Math.floor(timeLeft / 3600)).padStart(2,'0');
+      const m = String(Math.floor((timeLeft % 3600) / 60)).padStart(2,'0');
+      const s = String(timeLeft % 60).padStart(2,'0');
+      document.getElementById("countdown").innerText = `${h}:${m}:${s}`;
+    }, 1000);
+
+    calculate();
+  </script>
+</body>
+</html>
